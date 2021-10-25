@@ -5,7 +5,7 @@ DECLARE
     client_id uuid;
     client    bot_members;
 BEGIN
-    FOR client_id in SELECT public.events_get_clients(NEW.id, NEW.event_type)
+    FOR client_id in SELECT public.events_get_clients((NEW.data->>'id')::uuid, NEW.event_type)
         LOOP
             SELECT
                    *
@@ -14,7 +14,7 @@ BEGIN
                 WHERE id = client_id;
 
             IF NEW.event_type = 'MESSAGE_CREATED' THEN
-                EXECUTE public.events_dispatch_message(NEW.id, NEW.data, client);
+                EXECUTE public.events_dispatch_message(NEW.id, NEW.event_type,(NEW.data->>'id')::uuid, client);
             end if;
             CONTINUE;
         END LOOP;

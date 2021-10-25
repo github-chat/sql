@@ -9,7 +9,8 @@ BEGIN
     END IF;
 
     -- Register Event For Bots!
-    EXECUTE public.events_register('MESSAGE_CREATED', NEW.id);
+    INSERT INTO public.events_log (event_type, data)
+    VALUES ('MESSAGE_CREATED', ('{"id": "' || NEW.id || '"}')::jsonb);
 
     RETURN NEW;
 END;
