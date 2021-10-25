@@ -1,15 +1,22 @@
-CREATE OR REPLACE FUNCTION public.events_messages_trigger()
+CREATE OR REPLACE FUNCTION public.events_insert_trigger_fnc()
     RETURNS TRIGGER AS
 $$
 DECLARE
-    event_data events_log;
+    client_id uuid;
+    client    bot_members;
 BEGIN
-    SELECT
-           public.events_register('MESSAGE_CREATED', NEW.id)
-    INTO event_data;
+    FOR client_id in SELECT public.events_get_clients(NEW.id, NEW.event_type)
+        LOOP
+            SELECT
+                   *
+                INTO client
+                FROM bot_members
+                WHERE id = client_id;
 
-    EXECUTE public.events_dispatch(event_data);
-
-    RETURN NEW;
+            IF NEW.event_type = 'MESSAGE_CREATED' THEN
+                EXECUTE public.events_dispatch_message(NEW.id, NEW.data, client);
+            end if;
+            CONTINUE;
+        END LOOP;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
