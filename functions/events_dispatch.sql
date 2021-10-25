@@ -11,8 +11,6 @@ BEGIN
     FROM messages
     WHERE id = message_id;
 
-    SELECT
-           public.events_http_send_message_event(event_id, dispatch_event_type, client, message)
-    INTO res;
+    EXECUTE public.events_http_send_message_event(event_id, dispatch_event_type, client, message);
 END;
 $$ LANGUAGE plpgsql;
