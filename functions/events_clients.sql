@@ -16,7 +16,5 @@ BEGIN
                        AND bot_member.interactions_url IS NOT NULL)
         INTO clients;
     END IF;
-
-    RETURN clients;
 END;
 $$ LANGUAGE plpgsql;

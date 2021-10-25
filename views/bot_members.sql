@@ -3,7 +3,8 @@ CREATE OR REPLACE VIEW bot_members AS SELECT
     member.chat_id as chat_id,
     usr.flags as flags,
     bot.id as bot_id,
-    bot.interactions_url as interactions_url
+    bot.interactions_url as interactions_url,
+    bot.user_id as bot_user_id
 FROM public.members as member
 INNER JOIN users usr on usr.id = member.user_id
 INNER JOIN bots bot on bot.id = usr.bot_id
