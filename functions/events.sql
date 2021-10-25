@@ -4,19 +4,26 @@ $$
 DECLARE
     client_id uuid;
     client    bot_members;
+    res       http_client_response;
+    message   messages;
 BEGIN
-    FOR client_id in SELECT public.events_get_clients((NEW.data->>'id')::uuid, NEW.event_type)
+    FOR client_id in SELECT public.events_get_clients((NEW.data ->> 'id')::uuid, NEW.event_type)
         LOOP
-            SELECT
-                   *
-                INTO client
-                FROM bot_members
-                WHERE id = client_id;
+            SELECT *
+            INTO client
+            FROM bot_members
+            WHERE id = client_id;
 
             IF NEW.event_type = 'MESSAGE_CREATED' THEN
-                EXECUTE public.events_dispatch_message(NEW.id, NEW.event_type,(NEW.data->>'id')::uuid, client);
+                SELECT *
+                FROM messages
+                WHERE id = (NEW.data ->> 'id')::uuid
+                INTO message;
+                res := public.events_http_send_message_event(NEW.id, NEW.event_type, client, message);
             end if;
             CONTINUE;
         END LOOP;
+
+    RETURN NEW;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;

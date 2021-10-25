@@ -21,28 +21,3 @@ BEGIN
     );
 END;
 $$ LANGUAGE plpgsql;
-
--- CREATE OR REPLACE FUNCTION public.events_register(new_event_type public.event_type, new_event_data uuid)
---     RETURNS events_log AS
--- $$
--- DECLARE
---     event_data events_log;
--- BEGIN
---     INSERT INTO public.events_log (event_type, data)
---     VALUES (new_event_type, new_event_data)
---     RETURNING * INTO event_data;
---
---     RETURN event_data;
--- END;
--- $$ LANGUAGE plpgsql;
-
--- CREATE OR REPLACE FUNCTION public.events_get_event(event_id uuid)
---     RETURNS events_log AS
--- $$
--- DECLARE
---     event events_log;
--- BEGIN
---     SELECT * INTO event FROM public.events_log as e WHERE e.id = event_id;
---     return event;
--- END;
--- $$ LANGUAGE plpgsql;
