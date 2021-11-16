@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS public.users
     banned_at       timestamptz
 );
 
-CREATE TABLE IF NOT EXISTS public.chats
+CREATE TABLE IF NOT EXISTS public.repositories
 (
     id              uuid primary key not null default uuid_generate_v4(),
     name            varchar(25)      not null,
@@ -40,13 +40,28 @@ CREATE TABLE IF NOT EXISTS public.chats
     edited_at       timestamptz      not null default now(),
     deleted_at      timestamptz
 );
-ALTER TABLE chats
-    ADD CONSTRAINT fk_chat_owner FOREIGN KEY (owner_id) REFERENCES users (id);
+ALTER TABLE repositories
+    ADD CONSTRAINT fk_repository_owner FOREIGN KEY (owner_id) REFERENCES users (id);
 
-CREATE TABLE IF NOT EXISTS public.chat_profile
+CREATE TABLE IF NOT EXISTS public.chats
+(
+    id            uuid primary key not null default uuid_generate_v4(),
+    repository_id uuid             not null,
+    name          varchar(25)      not null,
+    type          int4             not null default 0,
+
+    -- Timestamps
+    created_at    timestamptz      not null default now(),
+    edited_at     timestamptz      not null default now(),
+    deleted_at    timestamptz
+);
+ALTER TABLE chats
+    ADD CONSTRAINT fk_chat_repository FOREIGN KEY (repository_id) REFERENCES repositories (id);
+
+CREATE TABLE IF NOT EXISTS public.member_profile
 (
     id                  uuid primary key not null default uuid_generate_v4(),
-    chat_id             uuid             not null,
+    repository_id       uuid             not null,
     user_id             uuid             not null,
 
     -- Profile Customisation Values
@@ -59,10 +74,10 @@ CREATE TABLE IF NOT EXISTS public.chat_profile
     -- Permissions
     permission_override bigint                    default 0
 );
-ALTER TABLE chat_profile
+ALTER TABLE member_profile
     ADD CONSTRAINT fk_profile_user FOREIGN KEY (user_id) REFERENCES users (id);
-ALTER TABLE chat_profile
-    ADD CONSTRAINT fk_profile_chat FOREIGN KEY (chat_id) REFERENCES chats (id);
+ALTER TABLE member_profile
+    ADD CONSTRAINT fk_profile_repo FOREIGN KEY (repository_id) REFERENCES repositories (id);
 
 CREATE TABLE IF NOT EXISTS public.reports
 (
@@ -95,7 +110,7 @@ ALTER TABLE messages
 ALTER TABLE messages
     ADD CONSTRAINT fk_messages_author FOREIGN KEY (author_id) REFERENCES users (id);
 ALTER TABLE messages
-    ADD CONSTRAINT fk_messages_author_profile FOREIGN KEY (author_profile_id) REFERENCES chat_profile (id);
+    ADD CONSTRAINT fk_messages_author_profile FOREIGN KEY (author_profile_id) REFERENCES member_profile (id);
 
 CREATE TABLE IF NOT EXISTS public.vanities
 (
