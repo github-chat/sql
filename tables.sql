@@ -92,7 +92,7 @@ CREATE TABLE IF NOT EXISTS public.reports
 
     -- Timestamps
     created_at       timestamptz      not null default now(),
-    
+
     -- Resolved Info
     resolved_at      timestamptz,
     resolved_message text,
