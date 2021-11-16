@@ -2,6 +2,7 @@ CREATE TABLE IF NOT EXISTS public.users
 (
     id              uuid primary key not null default uuid_generate_v4(),
     username        varchar(25)      not null,
+    provider_email  text             not null,
     provider_avatar text,
 
     -- Default Profile Values
