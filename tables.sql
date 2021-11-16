@@ -17,6 +17,10 @@ CREATE TABLE IF NOT EXISTS public.users
     public_flags    bigint           not null default 0, -- Flags Show To Public
     private_flags   bigint           not null default 0, -- Flags Hidden
 
+    -- Premium Info
+    premium_type    int2             not null default 0,
+    -- TODO add stripe premium info!
+
     -- Timestamps
     created_at      timestamptz      not null default now(),
     edited_at       timestamptz      not null default now(),
