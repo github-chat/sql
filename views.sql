@@ -16,21 +16,28 @@ WHERE u.banned_at IS NULL;
 
 CREATE OR REPLACE VIEW public.p_Profiles AS
 SELECT p.id                  as id,
+       u.id                  as user_id,
        p.repository_id       as repository_id,
        u.username            as username,
        u.avatar              as avatar,
+       u.provider_avatar     as provider_avatar,
        u.bio                 as bio,
        u.banner_colour       as banner_colour,
        u.banner              as banner,
+       u.country             as country,
        p.nickname            as repository_nickname,
        p.avatar              as repository_avatar,
        p.bio                 as repository_bio,
        p.banner_colour       as repository_banner_colour,
        p.banner              as repository_banner,
        p.permission_override as permission_override,
-       u.flags               as flags
+       u.flags               as flags,
+       p.created_at          as joined_at,
+       p.edited_at           as edited_at,
+       p.banned_at           as banned_at
 FROM public.member_profile p
-         INNER JOIN public.p_Users u on u.id = p.user_id;
+         INNER JOIN public.p_Users u on u.id = p.user_id
+WHERE p.deleted_at IS NULL;
 
 CREATE OR REPLACE VIEW public.p_Repositories AS
 SELECT r.id           as id,

@@ -76,7 +76,13 @@ CREATE TABLE IF NOT EXISTS public.member_profile
     banner              text,
 
     -- Permissions
-    permission_override bigint                    default 0
+    permission_override bigint                    default 0,
+
+    -- Timestamps
+    created_at          timestamptz      not null default now(),
+    edited_at           timestamptz      not null default now(),
+    banned_at           timestamptz,
+    deleted_at          timestamptz
 );
 ALTER TABLE member_profile
     ADD CONSTRAINT fk_profile_user FOREIGN KEY (user_id) REFERENCES users (id);
