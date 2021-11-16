@@ -110,6 +110,7 @@ CREATE TABLE IF NOT EXISTS public.messages
     chat_id           uuid             not null,
     author_id         uuid             not null,
     author_profile_id uuid             not null,
+    content           text,
     attachments       jsonb[]          not null default array []::jsonb[],
     mentions          uuid[]           not null default array []::uuid[],
     parent_message    uuid,
