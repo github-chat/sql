@@ -62,6 +62,7 @@ SELECT m.id                as id,
        r.id                as repository_id,
        r.name              as repository_name,
        m.author_profile_id as author_profile_id,
+       m.content           as content,
        m.attachments       as attachements,
        m.mentions          as mentions,
        m.parent_message    as parent_message_id,
@@ -91,13 +92,13 @@ FROM public.p_Vanities v
 WHERE v.type = 2;
 
 CREATE OR REPLACE VIEW public.p_Reports AS
-SELECT r.id          as id,
-       r.type        as type,
-       r.reporter_id as reporter_id,
-       r.resolved_at as resolved_at,
-       r.resolved_by as resolved_by_id,
-       u.username as resolved_by_username,
-       u.avatar as resolved_by_avatar,
+SELECT r.id              as id,
+       r.type            as type,
+       r.reporter_id     as reporter_id,
+       r.resolved_at     as resolved_at,
+       r.resolved_by     as resolved_by_id,
+       u.username        as resolved_by_username,
+       u.avatar          as resolved_by_avatar,
        u.provider_avatar as resolved_by_provider_avatar
 FROM public.reports r
          INNER JOIN public.p_Users u on r.resolved_by = u.id;
