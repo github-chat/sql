@@ -32,7 +32,6 @@ CREATE TABLE IF NOT EXISTS public.repositories
 (
     id              uuid primary key not null default uuid_generate_v4(),
     name            varchar(25)      not null,
-    provider_avatar text,
     owner_id        uuid             not null,
 
     -- Flags
