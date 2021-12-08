@@ -42,6 +42,7 @@ WHERE p.deleted_at IS NULL;
 CREATE OR REPLACE VIEW public.p_Repositories AS
 SELECT r.id           as id,
        r.name         as name,
+       r.default_chat as default_chat,
        r.owner_id     as owner_id,
        u.username     as owner_name,
        r.public_flags as flags,

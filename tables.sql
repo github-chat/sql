@@ -34,6 +34,8 @@ CREATE TABLE IF NOT EXISTS public.repositories
     name          varchar(25)      not null,
     owner_id      uuid             not null,
 
+    default_chat  uuid,
+
     -- Flags
     flags         bigint           not null default 0, -- All Flags
     public_flags  bigint           not null default 0, -- Flags Show To Public
